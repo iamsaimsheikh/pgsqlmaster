@@ -1,6 +1,7 @@
-import asyncHandler from "express-async-handler";
+const asyncHandler = require('express-async-handler');
 
-export const handle404 = asyncHandler((req, res) => {
-    res.status(400).send({ message: "Endpoint not found!" })
-})
+const handle404 = asyncHandler((req, res) => {
+    res.status(400).send({ message: 'Endpoint not found!' });
+});
 
+module.exports = handle404;

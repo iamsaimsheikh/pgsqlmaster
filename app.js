@@ -1,24 +1,33 @@
-import express from 'express'
-import dotenv from 'dotenv'
-dotenv.config()
+const express = require('express');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const healthRoute = require('./routes/healthRoute.js');
+const authRoute = require('./routes/authRoute.js');
+const handle404 = require('./routes/handle404.js');
 
-// All routes import
-import healthRoute from './routes/healthRoute.js'
-import { handle404 } from './routes/handle404.js'
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use('/api/health', healthRoute)
+// Parse application/json requests
+app.use(bodyParser.json());
+
+// Parse urlencoded requests
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Routes
+app.use('/api/health', healthRoute);
+app.use('/api/auth', authRoute);
 
 app.get('/', (req, res) => {
     res.status(200).send({
-        message: "Working!",
+        message: 'Working!',
         status: 'Success!'
-    })
-})
+    });
+});
 
-app.use('*', handle404)
+app.use('*', handle404);
 
 app.listen(process.env.PORT, () => {
-    console.log("App is running on port " + process.env.PORT)
-})
+    console.log('App is running on port ' + process.env.PORT);
+});

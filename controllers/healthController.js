@@ -1,10 +1,11 @@
-import asyncHandler from 'express-async-handler'
+const asyncHandler = require('express-async-handler');
 
-export const getHealth = asyncHandler((req, res) => {
+const getHealth = asyncHandler((req, res) => {
     try {
-        res.status(200).send({ message: "API IS WORKING!" })
+        res.status(200).send({ message: 'API IS WORKING!' });
     } catch (error) {
-        res.status(400).send({ message: "API NOT WORKING!" })
+        res.status(400).send({ message: 'API NOT WORKING!' });
     }
-})
+});
 
+module.exports = { getHealth };
