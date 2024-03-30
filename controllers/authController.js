@@ -1,15 +1,18 @@
 const asyncHandler = require('express-async-handler');
 const { errorMessage, successMessage } = require('../utils/helper');
 const { hashPassword, comparePassword } = require('../utils/bcrypt');
-const jwt = require('jsonwebtoken');
-const user = require('../db/models/user');
+const User = require('../db/models/user');
+const { generateToken } = require('../utils/generateToken');
 
 const signUp = asyncHandler(async (req, res) => {
     const body = req.body;
 
+    const exists = await User.findOne({ where: { email: body.email } })
+    if (exists) return res.status(400).json(errorMessage('User already exists!', 'failed'));
+
     const hashedPassword = await hashPassword(body.password);
 
-    const newUser = user.create({
+    const newUser = await User.create({
         userType: body.userType,
         firstName: body.firstName,
         lastName: body.lastName,
@@ -17,7 +20,17 @@ const signUp = asyncHandler(async (req, res) => {
         password: hashedPassword,
     });
 
-    return res.status(200).json(successMessage('User created!', newUser));
+    if (!newUser) return res.status(400).json(errorMessage('User already exists!', 'failed'));
+
+    const result = newUser.toJSON()
+    delete result.password
+    delete result.deletedAt
+
+    result.token = generateToken({
+        id: result.id
+    })
+
+    return res.status(200).json(successMessage('User created!', result));
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -33,13 +46,9 @@ const login = asyncHandler(async (req, res) => {
         return res.status(400).json(errorMessage('Invalid credentials. Password is incorrect!', 'failed'));
     }
 
-    const payload = {
-        user: {
-            id: existingUser.id,
-        },
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = generateToken({
+        id: existingUser.id
+    })
 
     return res.status(200).json(successMessage('Login successful!', { token }));
 });
