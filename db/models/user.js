@@ -1,6 +1,7 @@
 'use strict';
 const { Model, Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
+const project = require('./project');
 const user = sequelize.define(
   'user',
   {
@@ -106,5 +107,8 @@ const user = sequelize.define(
     modelName: 'user',
   }
 );
+
+user.hasMany(project, { foreignKey: 'createdBy' })
+project.belongsTo(user, { foreignKey: 'createdBy' })
 
 module.exports = user

@@ -19,4 +19,15 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-module.exports = isAuthenticated;
+const restrictTo = (...userType) => {
+  const checkPermission = (req, res, next) => {
+    if (!userType.includes(req.user.userType)) {
+      return next(new Error("You don't have permission to perform this action!"))
+    }
+    return next();
+  }
+
+  return checkPermission;
+}
+
+module.exports = { isAuthenticated, restrictTo };
