@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('project', {
+    await queryInterface.createTable('projects', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,20 +13,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      isFeatured: {
+      is_featured: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false
       },
-      productImage: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+      product_image: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       price: {
         type: Sequelize.DECIMAL,
         allowNull: false
       },
-      shortDescription: {
+      short_description: {
         type: Sequelize.TEXT,
         allowNull: false
       },
@@ -34,20 +34,20 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      productUrl: {
+      product_url: {
         type: Sequelize.STRING,
         allowNull: false
       },
       category: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
+        type: Sequelize.STRING
       },
       tags: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
+        type: Sequelize.STRING
       },
-      createdBy: {
+      created_by: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'user',
+          model: 'Users',
           key: 'id'
         }
       },
@@ -65,6 +65,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('project');
+    await queryInterface.dropTable('projects');
   }
 };

@@ -4,19 +4,19 @@ module.exports = {
     up: (queryInterface, Sequelize) => {
         let password = process.env.ADMIN_PASSWORD;
         const hashPassword = bcrypt.hashSync(password, 10);
-        return queryInterface.bulkInsert('user', [
+        return queryInterface.bulkInsert('users', [
             {
-                userType: '0',
-                firstName: 'John',
-                lastName: 'Doe',
+                user_type: '0',
+                first_name: 'John',
+                last_name: 'Doe',
                 email: process.env.ADMIN_EMAIL,
                 password: hashPassword,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                created_at: new Date(),
+                updated_at: new Date(),
             },
         ]);
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.bulkDelete('user', { userType: '0' }, {});
+        return queryInterface.bulkDelete('users', { user_type: '0' }, {});
     },
 };

@@ -14,12 +14,12 @@ const signUp = asyncHandler(async (req, res) => {
     const confirmedHashedPassword = await hashPassword(body.confirmPassword)
 
     const newUser = await User.create({
-        userType: body.userType,
-        firstName: body.firstName,
-        lastName: body.lastName,
+        user_type: body.userType,
+        first_name: body.firstName,
+        last_name: body.lastName,
         email: body.email,
         password: hashedPassword,
-        confirmPassword: confirmedHashedPassword
+        confirm_password: confirmedHashedPassword
     });
 
     if (!newUser) return res.status(400).json(errorMessage('User already exists!', 'failed'));

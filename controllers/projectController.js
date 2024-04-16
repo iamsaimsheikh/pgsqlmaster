@@ -1,23 +1,23 @@
 const asyncHandler = require("express-async-handler")
-const project = require("../db/models/project")
+const Project = require("../db/models/project")
+const User = require("../db/models/user")
 const { errorMessage, successMessage } = require("../utils/helper")
-const user = require("../db/models/user")
 
 const createProject = asyncHandler(async (req, res) => {
     const body = req.body
     const userId = req.userId
 
-    const newProject = await project.create({
+    const newProject = await Project.create({
         title: body.title,
-        isFeatured: body.isFeatured,
-        productImage: body.productImage,
+        is_featured: body.isFeatured,
+        product_image: body.productImage,
         price: body.price,
-        shortDescription: body.shortDescription,
+        short_description: body.shortDescription,
         description: body.description,
-        productUrl: body.productUrl,
+        product_url: body.productUrl,
         category: body.category,
         tags: body.tags,
-        createdBy: userId,
+        created_by: userId,
     });
 
     if (!newProject) return res.status(400).json(errorMessage("Project could not be created!", "failed"));
@@ -27,9 +27,9 @@ const createProject = asyncHandler(async (req, res) => {
 
 const getAllProjects = asyncHandler(async (req, res) => {
     try {
-        const projects = await project.findAll({
+        const projects = await Project.findAll({
             include: {
-                model: user,
+                model: User,
                 attributes: { exclude: ['password'] }
             }
         })
@@ -42,11 +42,11 @@ const getAllProjects = asyncHandler(async (req, res) => {
 const getProjectById = asyncHandler(async (req, res) => {
     try {
         const projectId = req.params.projectId;
-        const projectById = await project.findByPk(
+        const projectById = await Project.findByPk(
             projectId,
             {
                 include: {
-                    model: user,
+                    model: User,
                     attributes: { exclude: ['password'] }
                 }
             }
@@ -65,8 +65,8 @@ const updateProject = asyncHandler(async (req, res, next) => {
     const projectId = req.params.id;
     const body = req.body;
 
-    const result = await project.findOne({
-        where: { id: projectId, createdBy: userId },
+    const result = await Project.findOne({
+        where: { id: projectId, created_by: userId },
     });
 
     if (!result) {
@@ -74,11 +74,11 @@ const updateProject = asyncHandler(async (req, res, next) => {
     }
 
     result.title = body.title;
-    result.productImage = body.productImage;
+    result.product_image = body.productImage;
     result.price = body.price;
-    result.shortDescription = body.shortDescription;
+    result.short_description = body.shortDescription;
     result.description = body.description;
-    result.productUrl = body.productUrl;
+    result.product_url = body.productUrl;
     result.category = body.category;
     result.tags = body.tags;
 
@@ -92,8 +92,8 @@ const deleteProject = asyncHandler(async (req, res, next) => {
     const userId = req.user.id;
     const projectId = req.params.id;
 
-    const result = await project.findOne({
-        where: { id: projectId, createdBy: userId },
+    const result = await Project.findOne({
+        where: { id: projectId, created_by: userId },
     });
 
     if (!result) {

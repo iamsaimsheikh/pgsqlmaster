@@ -2,8 +2,9 @@
 const { Model, Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
 const project = require('./project');
+const Task = require('./task')
 const user = sequelize.define(
-  'user',
+  'Users',
   {
     id: {
       allowNull: false,
@@ -11,39 +12,39 @@ const user = sequelize.define(
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    userType: {
+    user_type: {
       type: DataTypes.ENUM('0', '1', '2'),
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'firstName cannot be null',
+          msg: 'user_type cannot be null',
         },
         notEmpty: {
-          msg: 'firstName cannot be empty',
+          msg: 'user_type cannot be empty',
         },
       },
     },
-    firstName: {
+    first_name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'firstName cannot be null',
+          msg: 'first_name cannot be null',
         },
         notEmpty: {
-          msg: 'firstName cannot be empty',
+          msg: 'first_name cannot be empty',
         },
       },
     },
-    lastName: {
+    last_name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'lastName cannot be null',
+          msg: 'last_name cannot be null',
         },
         notEmpty: {
-          msg: 'lastName cannot be empty',
+          msg: 'last_name cannot be empty',
         },
       },
     },
@@ -74,7 +75,7 @@ const user = sequelize.define(
         },
       },
     },
-    confirmPassword: {
+    confirm_password: {
       type: DataTypes.VIRTUAL,
       set(value) {
         if (this.password.length < 7) {
@@ -104,11 +105,15 @@ const user = sequelize.define(
   {
     paranoid: true,
     freezeTableName: true,
-    modelName: 'user',
+    modelName: 'Users',
   }
 );
 
-user.hasMany(project, { foreignKey: 'createdBy' })
-project.belongsTo(user, { foreignKey: 'createdBy' })
+user.hasMany(project, { foreignKey: 'created_by' })
+project.belongsTo(user, { foreignKey: 'created_by' })
+
+user.hasMany(Task, { foreignKey: 'created_by' });
+Task.belongsTo(user, { foreignKey: 'created_by' });
+
 
 module.exports = user

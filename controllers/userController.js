@@ -6,7 +6,7 @@ const { successMessage } = require('../utils/helper');
 const getAllUser = asyncHandler(async (req, res, next) => {
     const users = await user.findAndCountAll({
         where: {
-            userType: {
+            user_type: {
                 [Sequelize.Op.ne]: '0',
             },
         },

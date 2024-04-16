@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
 
 module.exports = sequelize.define(
-  'project',
+  'Projects',
   {
     id: {
       allowNull: false,
@@ -22,23 +22,23 @@ module.exports = sequelize.define(
         },
       },
     },
-    isFeatured: {
+    is_featured: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,
       validate: {
         isIn: {
           args: [[true, false]],
-          msg: 'isFeatured value must be true or false',
+          msg: 'is_featured value must be true or false',
         },
       },
     },
-    productImage: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    product_image: {
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'productImage cannot be null',
+          msg: 'product_image cannot be null',
         },
       },
     },
@@ -54,15 +54,15 @@ module.exports = sequelize.define(
         },
       },
     },
-    shortDescription: {
+    short_description: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'shortDescription cannot be null',
+          msg: 'short_description cannot be null',
         },
         notEmpty: {
-          msg: 'shortDescription cannot be empty',
+          msg: 'short_description cannot be empty',
         },
       },
     },
@@ -78,23 +78,23 @@ module.exports = sequelize.define(
         },
       },
     },
-    productUrl: {
+    product_url: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'productUrl cannot be null',
+          msg: 'product_url cannot be null',
         },
         notEmpty: {
-          msg: 'productUrl cannot be empty',
+          msg: 'product_url cannot be empty',
         },
         isUrl: {
-          msg: 'Invalid productUrl string',
+          msg: 'Invalid product_url string',
         },
       },
     },
     category: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -103,7 +103,7 @@ module.exports = sequelize.define(
       },
     },
     tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -111,10 +111,10 @@ module.exports = sequelize.define(
         },
       },
     },
-    createdBy: {
+    created_by: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'User',
+        model: 'Users',
         key: 'id',
       },
     },
@@ -130,6 +130,6 @@ module.exports = sequelize.define(
   {
     paranoid: true,
     freezeTableName: true,
-    modelName: 'project',
+    modelName: 'Projects',
   }
 );
